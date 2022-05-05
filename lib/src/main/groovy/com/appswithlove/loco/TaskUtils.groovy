@@ -59,7 +59,7 @@ class TaskUtils {
                 // todo: if there's a better, more reliable solution to handle this, please submit a PR.
                 def wrongXmlString = '<?xml version="1.0" encoding="utf8"?>'
                 if (text.startsWith(wrongXmlString)) {
-                    def expectedXmlString = '<?xml version="1.0" encoding="utf-8"?>'
+                    def expectedXmlString = '<?xml version="1.0" encoding="UTF-8"?>'
                     text = text.replace(wrongXmlString, expectedXmlString)
                 }
 
@@ -84,7 +84,18 @@ class TaskUtils {
             directory.mkdir()
         }
 
-        def file = new File(directory.absolutePath + "/" + locoConfig.fileName + ".xml")
+        println("---------------------***********************-----------------")
+        println("save UTF8 windows!")
+        println("---------------*****************-----------------------")
+        Writer out = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(directory.absolutePath + "/" + locoConfig.fileName + "hackStream.xml"), "UTF-8"));
+        try {
+            out.write(text);
+        } finally {
+            out.close();
+        }
+        def file = new File(directory.absolutePath + "/" + locoConfig.fileName + "hack.xml")
         file.write(text)
+
     }
 }
